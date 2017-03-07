@@ -40,7 +40,7 @@ import de.tudarmstadt.ukp.wikipedia.api.exception.WikiApiException;
 
 public class TalkNames {
 	
-	public static List<String> read_dbcred(String fpath) {
+	public static List<String> read_file(String fpath) {
 		/**
 		 * Get database credentials
 		 */
@@ -59,7 +59,7 @@ public class TalkNames {
 
 	public static void main(String[] args) throws Exception{
 		
-		List<String> dbcred = read_dbcred("db_cred.txt");
+		List<String> dbcred = read_file("db_cred.txt");
 		
 		//setup db config
 		DatabaseConfiguration dbconf = new DatabaseConfiguration();
@@ -74,15 +74,17 @@ public class TalkNames {
 		RevisionApi revApi = new RevisionApi(dbconf);
 
 		Iterable<Page> pageNames = wiki.getPages();
-		String outCsvName = "talk_pagenames";
+		String outCsvName = "talk_pagenames.txt";
 
 		int pageCounter = 0;
 
 		// true refers to appending
 		//		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outCsvName + ".txt"), true)); 
-		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(outCsvName + ".txt"), true)); 
+		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(outCsvName), true)); 
 		PrintWriter writer = new PrintWriter(bw, true); // true auto-flushes
 
+		// Load names already obtained
+		List<String> already = read_file(outCsvName);
 
 		// Try to get discussion pages
 		for (Page page : pageNames) {
@@ -97,7 +99,8 @@ public class TalkNames {
 //			}
 			
 			// blacklist of pages that fail
-			if (page.getTitle().getPlainTitle().equals("Abdülaziz") ||
+			if (already.contains(page.getTitle().getPlainTitle()) ||
+					page.getTitle().getPlainTitle().equals("Abdülaziz") ||
 					page.getTitle().getPlainTitle().equals("Bipolar disorder") ||
 					page.getTitle().getPlainTitle().equals("Osama bin Laden") ||
 					page.getTitle().getPlainTitle().equals("Propaganda") ||
@@ -109,6 +112,10 @@ public class TalkNames {
 					page.getTitle().getPlainTitle().equals("StarCraft") ||
 					page.getTitle().getPlainTitle().equals("The Doors") ||
 					page.getTitle().getPlainTitle().equals("United Nations") ||
+					page.getTitle().getPlainTitle().equals("X-Men") ||
+					page.getTitle().getPlainTitle().equals("Axis of evil") ||
+					page.getTitle().getPlainTitle().equals("Hugo Chávez") ||
+					page.getTitle().getPlainTitle().equals("Wild boar") ||
 					page.getTitle().getPlainTitle().equals("Loch Ness Monster"))
 			{
 				continue;
