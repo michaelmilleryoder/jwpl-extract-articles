@@ -30,7 +30,7 @@ import de.tudarmstadt.ukp.wikipedia.revisionmachine.api.RevisionIterator;
 
 /**
  * 
- * @author michael
+ * @author Michael Miller Yoder
  * 
  * Output latest article revisions of Wikipedia article names read from a file
  *
@@ -38,7 +38,7 @@ import de.tudarmstadt.ukp.wikipedia.revisionmachine.api.RevisionIterator;
 
 public class LatestArticleRevision {
 	
-	public static List<String> read_file(String fpath) {
+	public static List<String> readFile(String fpath) {
 		/**
 		 * Get database credentials
 		 */
@@ -55,35 +55,9 @@ public class LatestArticleRevision {
 		return lines;
 	}
 
-	private static String[] getArticleNames(String infile) throws IOException {
-		/** Expects separate name on separate line in infile **/
-		String[] articles = {};
-		try {
-			CSVReader reader = new CSVReader(new FileReader(infile), '\t');
-			List<String[]> lines = reader.readAll();
-			int numLines = lines.size();
-			articles = new String[numLines];
-			for (int lineCount = 0; lineCount < numLines; lineCount++) {
-				String[] line = lines.get(lineCount);
-				if (line.length == 1)
-		    		 articles[lineCount] = line[0];
-		    	 else {
-		    		 System.out.println("Error: more than one article name found on a line");
-		    	 }
-			reader.close();
-		     }
-	
-		} catch (FileNotFoundException e) {
-			System.out.println("Input file for article names not found.");
-		}
-		
-		return articles;
-		
-	}
-
 	public static void main(String[] args) throws Exception{
 		//setup db config
-		List<String> dbcred = read_file("db_cred.txt");
+		List<String> dbcred = readFile("db_cred.txt");
 		DatabaseConfiguration dbconf = new DatabaseConfiguration();
 		dbconf.setHost("erebor.lti.cs.cmu.edu");
 		dbconf.setDatabase("enwiki_20140707_rev");
@@ -103,8 +77,8 @@ public class LatestArticleRevision {
 		File outfile = new File(outpath);
 		CSVWriter writer = new CSVWriter(new FileWriter(outpath, true), ',');
 
-		String[] pageNames = getArticleNames(articleNamesCsv);
-		//System.out.println("Number of article names " + pageNames.length);
+		List<String> pageNames = readFile(articleNamesCsv);
+		System.out.println("Number of article names " + pageNames.size());
 //		String[] pageNames = {"McDonald's"};
 		WriteCsv csvWriter = new WriteCsv();
 
@@ -163,6 +137,8 @@ public class LatestArticleRevision {
 				//					System.out.println("Wrote csv at " + outpath);
 			}
 			catch (Exception e) {
+				System.out.println(String.format("Problem getting article", pageName));
+				continue;
 			}
 		}
 		
