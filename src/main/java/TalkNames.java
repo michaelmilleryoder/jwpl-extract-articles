@@ -75,13 +75,17 @@ public class TalkNames {
 
 		Iterable<Page> pageNames = wiki.getPages();
 		String outCsvName = "talk_pagenames.txt";
+		String blacklistPath = "blacklist.txt";
 
 		int pageCounter = 0;
 
-		// true refers to appending
-		//		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outCsvName + ".txt"), true)); 
+		// Outfile for names
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(outCsvName), true)); 
 		PrintWriter writer = new PrintWriter(bw, true); // true auto-flushes
+
+		// File for blacklisted problem pages
+		BufferedWriter blacklistBw = new BufferedWriter(new FileWriter(new File(blacklistPath), true)); 
+		PrintWriter blacklistWriter = new PrintWriter(blacklistBw, true); // true auto-flushes
 
 		// Load names already obtained
 		List<String> already = read_file(outCsvName);
@@ -97,6 +101,8 @@ public class TalkNames {
 //			if (pageCounter > 5) {
 //				break;
 //			}
+			
+			String pageTitle = page.getTitle().getPlainTitle();
 			
 			// blacklist of pages that fail
 			if (already.contains(page.getTitle().getPlainTitle()) ||
@@ -116,6 +122,14 @@ public class TalkNames {
 					page.getTitle().getPlainTitle().equals("Axis of evil") ||
 					page.getTitle().getPlainTitle().equals("Hugo Chávez") ||
 					page.getTitle().getPlainTitle().equals("Wild boar") ||
+					page.getTitle().getPlainTitle().equals("Sea lion") ||
+					page.getTitle().getPlainTitle().equals("Noatun") ||
+					page.getTitle().getPlainTitle().equals("Tāwhirimātea") ||
+					page.getTitle().getPlainTitle().equals("Mārikoriko") ||
+					page.getTitle().getPlainTitle().equals("Taranga (Māori mythology)") ||
+					page.getTitle().getPlainTitle().equals("Ngā Mānawa") ||
+					page.getTitle().getPlainTitle().equals("Yo Sé Que Mentía") ||
+					page.getTitle().getPlainTitle().equals("Elizabeth Báthory") ||
 					page.getTitle().getPlainTitle().equals("Loch Ness Monster"))
 			{
 				continue;
@@ -146,6 +160,11 @@ public class TalkNames {
 			catch (WikiApiException e) {
 				System.out.println("Couldn't find page");
 			}
+			catch (Exception e) { // probably won't work
+				System.out.println(String.format("PROBLEM PAGE! %s", page.getTitle().getPlainTitle()));
+				blacklistWriter.println(pageTitle);
+			}
+
 		} // end for
 
 		//	 Write to the csv
