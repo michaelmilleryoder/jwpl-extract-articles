@@ -18,6 +18,14 @@ import de.tudarmstadt.ukp.wikipedia.parser.mediawiki.MediaWikiParserFactory;
 import de.tudarmstadt.ukp.wikipedia.revisionmachine.api.RevisionApi;
 import de.tudarmstadt.ukp.wikipedia.revisionmachine.api.Revision;
 
+/**
+ * 
+ * @author Michael Miller Yoder
+ * 
+ * This script gets full texts of talk pages.
+ *
+ */
+
 public class Talk {
 
 	public static void main(String[] args) throws Exception{

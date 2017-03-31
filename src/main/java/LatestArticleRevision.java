@@ -72,14 +72,17 @@ public class LatestArticleRevision {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 //		String articleNamesCsv = "/home/michael/school/research/wp/wikipedia/data/talk_pagenames_10k.txt";
-		String articleNamesCsv = "talk_pagenames_10k.txt";
+		String articleNamesCsv = "talk_pagenames_100k.txt";
 		String outpath = "latest_revisions.csv";
 		File outfile = new File(outpath);
 		CSVWriter writer = new CSVWriter(new FileWriter(outpath, true), ',');
 
-		List<String> pageNames = readFile(articleNamesCsv);
-		System.out.println("Number of article names " + pageNames.size());
-//		String[] pageNames = {"McDonald's"};
+//		List<String> pageNames = readFile(articleNamesCsv);
+//		System.out.println("Number of article names " + pageNames.size());
+		
+		// Test a file
+		String[] pageNames = {"Meydan Tower"};
+
 		WriteCsv csvWriter = new WriteCsv();
 
 		List<String[]> lines = new ArrayList<String[]>();
@@ -121,6 +124,7 @@ public class LatestArticleRevision {
 				
 				// compress whitespace
 				String parsedText = pp.getText().replaceAll("\\s+", " ").trim();
+				System.out.println(parsedText);
 
 				String date = sdf.format(ts);
 
