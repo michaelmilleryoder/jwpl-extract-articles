@@ -65,7 +65,7 @@ public class AllArticleRevisions {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-		String articleNameCsv = "talk_pagenames_100k.txt";
+		String articleNameCsv = "pagenames.txt";
 		String outDirName = "enwiki_revisions/";
 		
 //		String[] pageNames = getArticleNames(articleNameCsv);
@@ -82,7 +82,7 @@ public class AllArticleRevisions {
 			
 			// If isn't already there
 			if (!pageFile.exists()) {
-				List<String[]> lines = new ArrayList<String[]>();
+				List<String[]> lines = new ArrayList<String[]>(); // could optimize this to instead be a String[]
 				try {
 					Page p = wiki.getPage(pageName);
 					int articleId = p.getPageId();
