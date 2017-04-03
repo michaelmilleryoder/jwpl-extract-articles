@@ -118,6 +118,10 @@ public class AllArticleRevisions {
 						lines.add(line);
 						//System.out.println(line);
 //						System.out.println("\tSample " + i + '/' + numRevisions + " added");
+						
+						if (i % 100 == 0) {
+							System.out.print(".");
+						}
 				
 					}
 			
